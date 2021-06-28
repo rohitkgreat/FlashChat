@@ -1,4 +1,4 @@
-# flashchat
+# mechat
 
 A new Flutter project.
 

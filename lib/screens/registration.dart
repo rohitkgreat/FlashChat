@@ -1,6 +1,8 @@
-import 'package:flashchat/components/padding.dart';
-import 'package:flashchat/constants.dart';
+import 'package:mechat/components/padding.dart';
+import 'package:mechat/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mechat/screens/chat.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static String regs = 'registr';
@@ -9,6 +11,15 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _auth = FirebaseAuth.instance;
+  String email = " ";
+  String pass = " ";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,18 +30,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Hero(
-              tag: 'logo',
-              child: Container(
-                height: 200.0,
-                child: Image.asset('images/logo.png'),
+            Flexible(
+              child: Hero(
+                tag: 'logo',
+                child: Container(
+                  height: 200.0,
+                  child: Image.asset('images/logo.png'),
+                ),
               ),
             ),
             SizedBox(
               height: 48.0,
             ),
             TextField(
+                keyboardType: TextInputType.emailAddress,
+                textAlign: TextAlign.center,
                 onChanged: (value) {
+                  email = value;
                   //Do something with the user input.
                 },
                 decoration:
@@ -56,7 +72,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 8.0,
             ),
             TextField(
+                obscureText: true,
+                textAlign: TextAlign.center,
                 onChanged: (value) {
+                  pass = value;
                   //Do something with the user input.
                 },
                 decoration:
@@ -85,7 +104,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             Padd(
               color: Colors.blueAccent,
               text: 'Register',
-              onpress: () {},
+              onpress: () async {
+                try {
+                  UserCredential newuser =
+                      await _auth.createUserWithEmailAndPassword(
+                          email: email, password: pass);
+                  if (newuser != null)
+                    Navigator.pushNamed(context, ChatScreen.id2);
+                } catch (e) {
+                  print('error');
+                  print(e);
+                }
+              },
             )
             // Padding(
             //   padding: EdgeInsets.symmetric(vertical: 16.0),

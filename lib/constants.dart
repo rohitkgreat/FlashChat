@@ -26,7 +26,7 @@ const colorizeColors = [
 ];
 
 const colorizeTextStyle = TextStyle(
-  fontSize: 50.0,
+  fontSize: 40.0,
   fontFamily: 'Marker',
 );
 
